@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>2026 FIFA World Cup 淘汰賽對陣表</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:11px;background:#f5f5f3;color:#1a1a18}
+.wrap{padding:8px;overflow-x:auto;width:100%}
+.bracket-wrap{display:flex;flex-direction:column;align-items:stretch;min-width:680px;max-width:760px;margin:0 auto}
+.title-row{display:flex;align-items:center;margin-bottom:6px}
+.title-spacer{flex:0 0 72px;min-width:72px}
+.title-spacer.r16{flex:0 0 66px;min-width:66px}
+.title-spacer.qf{flex:0 0 60px;min-width:60px}
+.title-spacer.sf{flex:0 0 56px;min-width:56px}
+.title-center{flex:0 0 196px;min-width:196px;text-align:center}
+.title-box{border:2px solid #C03030;border-radius:6px;padding:6px 8px;text-align:center;background:#fff;width:100%}
+.title-box h2{font-size:11px;font-weight:600;color:#1a1a18;margin-bottom:2px;white-space:nowrap}
+.title-box p{font-size:9px;color:#888}
+.bracket{display:flex;align-items:stretch;gap:0}
+.col{display:flex;flex-direction:column;justify-content:space-around;padding:0 2px}
+.col.r32{flex:0 0 72px;min-width:72px}
+.col.r16{flex:0 0 66px;min-width:66px}
+.col.qf{flex:0 0 60px;min-width:60px}
+.col.sf{flex:0 0 56px;min-width:56px}
+.col.center{flex:0 0 196px;min-width:196px;justify-content:center;align-items:center;gap:6px;padding:0 10px}
+.col-hdr{font-size:8px;font-weight:600;color:#888;text-align:center;padding:1px 0 4px;letter-spacing:.05em;text-transform:uppercase;border-bottom:1.5px solid #ccc;margin-bottom:3px}
+.match{display:flex;flex-direction:column;gap:1px;margin:2px 1px}
+.match-date{font-size:8px;color:#aaa;text-align:center;margin-bottom:1px;display:flex;justify-content:center;gap:4px;align-items:center}
+.match-date .dt{font-weight:600;color:#666}
+.ts{display:flex;align-items:center;border:1.5px solid;border-radius:4px;padding:1px 4px;height:20px}
+.ts input{border:none;background:transparent;font-size:9px;font-weight:600;width:100%;outline:none;font-family:inherit}
+.ts input::placeholder{font-weight:400;font-size:8px}
+/* 32強色 */
+.bL1 .ts{background:#E8F0FF;border-color:#6A9EE8}.bL1 .ts input{color:#1A4A8C}.bL1 .ts input::placeholder{color:#8AAAD0}
+.bL2 .ts{background:#E6F9EE;border-color:#5DC48A}.bL2 .ts input{color:#1A6040}.bL2 .ts input::placeholder{color:#7AB89A}
+.bL3 .ts{background:#FFF3E2;border-color:#E8A050}.bL3 .ts input{color:#7A3800}.bL3 .ts input::placeholder{color:#C08840}
+.bL4 .ts{background:#F8EEFF;border-color:#C080E0}.bL4 .ts input{color:#5A1070}.bL4 .ts input::placeholder{color:#A870C8}
+.bR1 .ts{background:#FFE8E8;border-color:#E87070}.bR1 .ts input{color:#8C1818}.bR1 .ts input::placeholder{color:#C89090}
+.bR2 .ts{background:#FFFBE0;border-color:#D4B030}.bR2 .ts input{color:#6B4800}.bR2 .ts input::placeholder{color:#B89040}
+.bR3 .ts{background:#E6F8FF;border-color:#50B8E0}.bR3 .ts input{color:#0A4860}.bR3 .ts input::placeholder{color:#70A8C0}
+.bR4 .ts{background:#FFE8F6;border-color:#E070B0}.bR4 .ts input{color:#7A0848}.bR4 .ts input::placeholder{color:#C878A8}
+/* 16強色 */
+.bL16a .ts{background:#EAF2FF;border-color:#5A90D8}.bL16a .ts input{color:#183C7A}.bL16a .ts input::placeholder{color:#7A9CC8}
+.bL16b .ts{background:#ECF9F2;border-color:#48B878}.bL16b .ts input{color:#145030}.bL16b .ts input::placeholder{color:#68A880}
+.bL16c .ts{background:#FFF6E8;border-color:#D09040}.bL16c .ts input{color:#6A3000}.bL16c .ts input::placeholder{color:#B08040}
+.bL16d .ts{background:#F6EEFF;border-color:#B070D8}.bL16d .ts input{color:#500868}.bL16d .ts input::placeholder{color:#9858C0}
+.bR16a .ts{background:#FFEAEA;border-color:#D85858}.bR16a .ts input{color:#780808}.bR16a .ts input::placeholder{color:#B07070}
+.bR16b .ts{background:#FFFCEA;border-color:#C8A820}.bR16b .ts input{color:#584000}.bR16b .ts input::placeholder{color:#A88030}
+.bR16c .ts{background:#FFE8F4;border-color:#D060A0}.bR16c .ts input{color:#680838}.bR16c .ts input::placeholder{color:#B06890}
+.bR16d .ts{background:#E8F6FF;border-color:#38A8D8}.bR16d .ts input{color:#083848}.bR16d .ts input::placeholder{color:#60A0B8}
+/* 八強色 */
+.bLQF1 .ts{background:#E4EEFF;border-color:#4878C8}.bLQF1 .ts input{color:#102858}.bLQF1 .ts input::placeholder{color:#6888B8}
+.bLQF2 .ts{background:#EDFAF4;border-color:#38A868}.bLQF2 .ts input{color:#0C4020}.bLQF2 .ts input::placeholder{color:#589870}
+.bRQF1 .ts{background:#FFE4E4;border-color:#C84040}.bRQF1 .ts input{color:#600000}.bRQF1 .ts input::placeholder{color:#A05858}
+.bRQF2 .ts{background:#FFF8E0;border-color:#B89010}.bRQF2 .ts input{color:#483000}.bRQF2 .ts input::placeholder{color:#907020}
+/* 四強色 */
+.bLSF .ts{background:#E0E8FF;border-color:#3060B8}.bLSF .ts input{color:#081840}.bLSF .ts input::placeholder{color:#5070A0}
+.bRSF .ts{background:#FFE0E0;border-color:#B83030}.bRSF .ts input{color:#500000}.bRSF .ts input::placeholder{color:#904040}
+/* 決賽 */
+.champ-box{border:2px solid #B8860B;border-radius:7px;background:#FFFDE0;padding:6px 8px;text-align:center;width:100%}
+.champ-box .lbl{font-size:9px;font-weight:600;color:#7A5000;margin-bottom:3px}
+.champ-box input{display:block;width:100%;border:none;background:transparent;color:#5C3800;font-size:10px;font-weight:600;text-align:center;outline:none;font-family:inherit}
+.champ-box input::placeholder{color:#B89040;font-weight:400;font-size:9px}
+.champ-box .divl{height:1px;background:#D4A830;margin:3px 0}
+.third-box{border:1.5px solid #8890A0;border-radius:6px;background:#ECEEF2;padding:5px 6px;text-align:center;width:100%}
+.third-box .lbl{font-size:8px;font-weight:600;color:#505870;margin-bottom:3px}
+.third-box input{display:block;width:100%;border:none;background:transparent;color:#303850;font-size:9px;font-weight:600;text-align:center;outline:none;font-family:inherit}
+.third-box input::placeholder{color:#909AB0;font-weight:400;font-size:8px}
+.hint{text-align:center;font-size:9px;color:#aaa;padding:4px 0 3px}
+.reset-btn{display:block;margin:6px auto 0;font-size:9px;padding:3px 10px;border:1px solid #ccc;border-radius:99px;background:#fff;color:#888;cursor:pointer}
+.reset-btn:hover{background:#f0f0f0}
+</style>
+</head>
+<body>
+<div class="wrap">
+<p class="hint">📱 手機橫放使用效果最佳</p>
+<div class="bracket-wrap">
+<div class="title-row">
+  <div class="title-spacer r32"></div>
+  <div class="title-spacer r16"></div>
+  <div class="title-spacer qf"></div>
+  <div class="title-spacer sf"></div>
+  <div class="title-center"><div class="title-box">
+    <h2>2026 FIFA World Cup 淘汰賽</h2>
+    <p>台灣時間 (UTC+8)</p>
+  </div></div>
+  <div class="title-spacer sf"></div>
+  <div class="title-spacer qf"></div>
+  <div class="title-spacer r16"></div>
+  <div class="title-spacer r32"></div>
+</div>
+<div class="bracket" id="bk"></div>
+</div>
+<button class="reset-btn" onclick="if(confirm('確定清除所有輸入資料？')){localStorage.removeItem('wc26html');location.reload()}">清除紀錄</button>
+</div>
+
+<script>
+const S=JSON.parse(localStorage.getItem('wc26html')||'{}');
+function save(){localStorage.setItem('wc26html',JSON.stringify(S));}
+function ts(key,ph){
+  const v=S[key]||'';
+  return `<div class="ts"><input data-key="${key}" value="${v}" placeholder="${ph}" maxlength="6"/></div>`;
+}
+function match(key,p1,p2,date,time,branch){
+  return `<div class="match ${branch}">
+    <div class="match-date"><span class="dt">${date}</span><span>${time}</span></div>
+    ${ts(key+'a',p1)}${ts(key+'b',p2)}
+  </div>`;
+}
+function col(cls,hdr,inner){
+  return `<div class="col ${cls}"><div class="col-hdr">${hdr}</div>${inner}</div>`;
+}
+
+const L32=
+  match('L1','德國',  '巴拉圭',    '6/30','04:30','bL1')+
+  match('L2','法國',  '瑞典',      '7/1', '05:00','bL2')+
+  match('L3','加拿大','南非',      '6/29','03:00','bL2')+
+  match('L4','荷蘭',  '摩洛哥',   '6/30','09:00','bL1')+
+  match('L5','葡萄牙','克羅埃西亞','7/3','07:00','bL3')+
+  match('L6','西班牙','奧地利',   '7/3', '03:00','bL4')+
+  match('L7','美國',  '波士尼亞', '7/2', '08:00','bL4')+
+  match('L8','比利時','塞內加爾', '7/2', '04:00','bL3');
+
+const R32=
+  match('R1','巴西',  '日本',       '6/30','01:00','bR1')+
+  match('R2','象牙海岸','挪威',     '7/1', '01:00','bR2')+
+  match('R3','厄瓜多','墨西哥',    '7/1', '09:00','bR2')+
+  match('R4','英格蘭','剛果民主',  '7/2', '00:00','bR1')+
+  match('R5','澳洲',  '埃及',      '7/4', '02:00','bR3')+
+  match('R6','阿根廷','維德角',    '7/4', '06:00','bR4')+
+  match('R7','瑞士',  '阿爾及利亞','7/3', '11:00','bR4')+
+  match('R8','哥倫比亞','迦納',    '7/4', '04:00','bR3');
+
+const L16=
+  match('LA','W L1','W L2','7/5','05:00','bL16a')+
+  match('LB','W L3','W L4','7/5','01:00','bL16b')+
+  match('LC','W L5','W L6','7/7','08:00','bL16c')+
+  match('LD','W L7','W L8','7/7','08:00','bL16d');
+
+const R16=
+  match('RA','W R1','W R2','7/6','04:00','bR16a')+
+  match('RB','W R3','W R4','7/6','09:00','bR16b')+
+  match('RC','W R6','W R5','7/6','05:00','bR16c')+
+  match('RD','W R7','W R8','7/8','04:00','bR16d');
+
+const LQF=
+  match('LQ1','W LA','W LB','7/10','04:00','bLQF1')+
+  match('LQ2','W LC','W LD','7/11','03:00','bLQF2');
+
+const RQF=
+  match('RQ1','W RA','W RB','7/12','05:00','bRQF1')+
+  match('RQ2','W RC','W RD','7/12','09:00','bRQF2');
+
+const LSF=match('LSF','W LQ1','W LQ2','7/15','03:00','bLSF');
+const RSF=match('RSF','W RQ1','W RQ2','7/16','03:00','bRSF');
+
+const CENTER=`<div class="col center">
+  <div class="col-hdr" style="border:none;padding-bottom:3px;width:100%;text-align:center">決賽</div>
+  <div class="champ-box">
+    <div class="lbl">🏆 決賽 7/20 03:00</div>
+    <input data-key="CHAMP1" value="${S['CHAMP1']||''}" placeholder="冠軍"/>
+    <div class="divl"></div>
+    <input data-key="CHAMP2" value="${S['CHAMP2']||''}" placeholder="亞軍" style="font-size:9px;color:#9A7020"/>
+  </div>
+  <div class="third-box">
+    <div class="lbl">🥉 季軍賽 7/19 05:00</div>
+    <input data-key="THIRD" value="${S['THIRD']||''}" placeholder="季軍"/>
+    <input data-key="FOURTH" value="${S['FOURTH']||''}" placeholder="殿軍" style="margin-top:2px;font-size:8px"/>
+  </div>
+</div>`;
+
+document.getElementById('bk').innerHTML=
+  col('r32','32強',L32)+
+  col('r16','16強',L16)+
+  col('qf','八強',LQF)+
+  col('sf','四強',LSF)+
+  CENTER+
+  col('sf','四強',RSF)+
+  col('qf','八強',RQF)+
+  col('r16','16強',R16)+
+  col('r32','32強',R32);
+
+document.querySelectorAll('input[data-key]').forEach(inp=>{
+  inp.addEventListener('input',()=>{
+    S[inp.dataset.key]=inp.value;
+    save();
+  });
+});
+</script>
+</body>
+</html>
