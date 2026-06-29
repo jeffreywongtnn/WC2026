@@ -26,19 +26,26 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
 .col.sf{flex:0 0 60px;min-width:60px}
 .col.center{flex:0 0 196px;min-width:196px;justify-content:center;align-items:center;gap:6px;padding:0 10px}
 .col-hdr{font-size:8px;font-weight:600;color:#888;text-align:center;padding:1px 0 4px;letter-spacing:.05em;text-transform:uppercase;border-bottom:1.5px solid #ccc;margin-bottom:3px}
-.match{display:flex;flex-direction:column;gap:1px;margin:2px 1px}
+.match{display:flex;flex-direction:column;gap:1px;margin:2px 1px;position:relative}
 .match-date{font-size:8px;color:#aaa;text-align:center;margin-bottom:1px;display:flex;justify-content:center;gap:4px}
 .match-date .dt{font-weight:600;color:#666}
 .team-row{display:flex;align-items:center;border:1.5px solid;border-radius:4px;height:22px;overflow:hidden;margin-bottom:1px}
 .team-name{flex:1;font-size:9px;font-weight:600;padding:0 3px;white-space:nowrap;overflow:hidden;border:none;background:transparent;outline:none;font-family:inherit;min-width:0}
 .sdiv{width:1px;background:rgba(0,0,0,0.12);height:100%;flex-shrink:0}
-.score-in{width:20px;flex-shrink:0;text-align:center;font-size:10px;font-weight:700;border:none;background:rgba(0,0,0,0.05);outline:none;font-family:inherit;padding:0;height:100%}
+.score-in{width:22px;flex-shrink:0;text-align:center;font-size:10px;font-weight:700;border:none;background:rgba(0,0,0,0.05);outline:none;font-family:inherit;padding:0;height:100%}
 .score-in:focus{background:rgba(0,0,0,0.1)}
 .pk-wrap{display:none;align-items:center;height:100%}
 .pk-wrap.show{display:flex}
-.pk-label{font-size:7px;color:#888;padding:0 2px;background:rgba(255,180,0,0.12);height:100%;display:flex;align-items:center;border-left:1px solid rgba(0,0,0,0.08)}
-.pk-in{width:18px;flex-shrink:0;text-align:center;font-size:9px;font-weight:700;border:none;background:rgba(255,200,0,0.18);outline:none;font-family:inherit;padding:0;height:100%}
-.pk-in:focus{background:rgba(255,200,0,0.35)}
+.pk-label{font-size:7px;color:#666;padding:0 2px;background:rgba(255,200,0,0.2);height:100%;display:flex;align-items:center;font-weight:600;border-left:1px solid rgba(0,0,0,0.1);white-space:nowrap}
+.pk-in{width:24px;flex-shrink:0;text-align:center;font-size:10px;font-weight:700;border:none;background:rgba(255,210,0,0.25);outline:none;font-family:inherit;padding:0;height:100%}
+.pk-in:focus{background:rgba(255,200,0,0.45)}
+/* PK獨立列 */
+.pk-row{display:none;align-items:center;justify-content:center;gap:3px;height:16px;margin:1px 0;background:rgba(255,210,0,0.15);border-radius:3px}
+.pk-row.show{display:flex}
+.pk-row .pk-label{font-size:7px;font-weight:700;color:#7A5800;background:transparent;border:none;padding:0 2px;height:auto}
+.pk-row .pk-in{width:26px;height:14px;font-size:10px;font-weight:700;text-align:center;border:1px solid rgba(180,140,0,0.35);border-radius:3px;background:rgba(255,220,0,0.25);outline:none;font-family:inherit;padding:0}
+.pk-row .pk-in:focus{background:rgba(255,200,0,0.5)}
+.pk-sep{font-size:10px;font-weight:700;color:#7A5800}
 .team-row.winner{border-width:2.5px;filter:brightness(0.90)}
 .team-row.winner .team-name{font-weight:800}
 .bL1 .team-row{background:#E8F0FF;border-color:#6A9EE8;color:#1A4A8C}
@@ -226,10 +233,8 @@ function updateStyle(mid){
   const t1=getTeam(mid,1);
   const r1=document.getElementById('row_'+mid+'_1');
   const r2=document.getElementById('row_'+mid+'_2');
-  const p1=document.getElementById('pkw_'+mid+'_1');
-  const p2=document.getElementById('pkw_'+mid+'_2');
-  if(p1)p1.classList.toggle('show',draw);
-  if(p2)p2.classList.toggle('show',draw);
+  const pkRow=document.getElementById('pkw_'+mid);
+  if(pkRow)pkRow.classList.toggle('show',draw);
   if(r1)r1.classList.toggle('winner',!!winner&&winner===t1);
   if(r2)r2.classList.toggle('winner',!!winner&&winner!==t1&&winner!=='');
 }
@@ -249,25 +254,25 @@ function buildMatch(m){
   const winner=getWinner(m.id);
   const w1=!!winner&&winner===t1;
   const w2=!!winner&&winner!==t1&&winner!=='';
+  // PK列獨立顯示在兩隊之間，不佔橫向空間
+  const pkRow=`<div class="pk-row${draw?' show':''}" id="pkw_${m.id}">
+    <span class="pk-label">PK</span>
+    <input class="pk-in" id="pk_${m.id}_1" data-mid="${m.id}" data-slot="1" type="number" min="0" max="20" value="${p1}" placeholder="-"/>
+    <span class="pk-sep">:</span>
+    <input class="pk-in" id="pk_${m.id}_2" data-mid="${m.id}" data-slot="2" type="number" min="0" max="20" value="${p2}" placeholder="-"/>
+  </div>`;
   return `<div class="match ${m.br}">
     <div class="match-date"><span class="dt">${m.d}</span><span>${m.tm}</span></div>
     <div class="team-row${w1?' winner':''}" id="row_${m.id}_1">
       <input class="team-name" id="tn_${m.id}_1" data-mid="${m.id}" data-slot="1" value="${t1}" placeholder="隊伍" maxlength="7"/>
       <div class="sdiv"></div>
       <input class="score-in" id="reg_${m.id}_1" data-mid="${m.id}" data-slot="1" type="number" min="0" max="30" value="${r1}" placeholder="-"/>
-      <div class="pk-wrap${draw?' show':''}" id="pkw_${m.id}_1">
-        <div class="sdiv"></div><span class="pk-label">PK</span>
-        <input class="pk-in" id="pk_${m.id}_1" data-mid="${m.id}" data-slot="1" type="number" min="0" max="20" value="${p1}" placeholder="-"/>
-      </div>
     </div>
+    ${pkRow}
     <div class="team-row${w2?' winner':''}" id="row_${m.id}_2">
       <input class="team-name" id="tn_${m.id}_2" data-mid="${m.id}" data-slot="2" value="${t2}" placeholder="隊伍" maxlength="7"/>
       <div class="sdiv"></div>
       <input class="score-in" id="reg_${m.id}_2" data-mid="${m.id}" data-slot="2" type="number" min="0" max="30" value="${r2}" placeholder="-"/>
-      <div class="pk-wrap${draw?' show':''}" id="pkw_${m.id}_2">
-        <div class="sdiv"></div><span class="pk-label">PK</span>
-        <input class="pk-in" id="pk_${m.id}_2" data-mid="${m.id}" data-slot="2" type="number" min="0" max="20" value="${p2}" placeholder="-"/>
-      </div>
     </div>
   </div>`;
 }
