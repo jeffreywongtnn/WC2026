@@ -79,126 +79,99 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
 </head>
 <body>
 <div class="wrap">
-<p class="hint">📱 手機橫放 · 常規比分相同時自動出現 PK 欄位 · 輸入比分自動晉級</p>
+<p class="hint">📱 手機橫放 · 常規比分相同自動出現PK欄 · 輸入比分自動晉級 · 台灣時間(UTC+8)</p>
 <div class="bracket-wrap">
 <div class="title-row">
   <div class="title-spacer r32"></div><div class="title-spacer r16"></div>
   <div class="title-spacer qf"></div><div class="title-spacer sf"></div>
   <div class="title-center"><div class="title-box">
     <h2>2026 FIFA World Cup 淘汰賽</h2>
-    <p>台灣時間 (UTC+8)</p>
+    <p>比賽台灣時間 (UTC+8) · FIFA官方換算</p>
   </div></div>
   <div class="title-spacer sf"></div><div class="title-spacer qf"></div>
   <div class="title-spacer r16"></div><div class="title-spacer r32"></div>
 </div>
 <div class="bracket" id="bk"></div>
 </div>
-<button class="reset-btn" onclick="if(confirm('確定清除所有比分與資料？')){localStorage.removeItem('wc26sc2');location.reload()}">清除紀錄</button>
+<button class="reset-btn" onclick="if(confirm('確定清除所有比分與資料？')){localStorage.removeItem('wc26v9');location.reload()}">清除紀錄</button>
 </div>
 
 <script>
 /*
-  完整時間換算 (ET夏令 UTC-4 → 台灣 UTC+8 = +12h)
-  ════════════════════════════════════════════════
-  32強:
-    M73 南非vs加拿大    6/28 3pm ET  → 6/29 03:00台 ✓
-    M74 德國vs巴拉圭   6/29 4:30pm ET → 6/30 04:30台 ✓
-    M75 荷蘭vs摩洛哥   6/29 9pm ET  → 6/30 09:00台 ✓
-    M76 巴西vs日本     6/29 1pm ET  → 6/30 01:00台 ✓
-    M77 法國vs瑞典     6/30 5pm ET  → 7/1  05:00台 ✓
-    M78 象牙海岸vs挪威  6/30 1pm ET  → 7/1  01:00台 ✓
-    M79 墨西哥vs厄瓜多  6/30 9pm ET  → 7/1  09:00台 ✓
-    M80 英格蘭vs剛果   7/1  12pm ET → 7/2  00:00台 ✓
-    M81 美國vs波士尼亞  7/1  8pm ET  → 7/2  08:00台 ✓
-    M82 比利時vs塞內加爾 7/1 4pm ET  → 7/2  04:00台 ✓
-    M83 葡萄牙vs克羅埃西亞 7/2 7pm ET → 7/3 07:00台 ✓
-    M84 西班牙vs奧地利  7/2  3pm ET  → 7/3  03:00台 ✓
-    M85 瑞士vs阿爾及利亞 7/2 11pm ET → 7/3  11:00台 ✓
-    M86 阿根廷vs維德角  7/3  6pm ET  → 7/4  06:00台 ✓
-    M87 哥倫比亞vs迦納  7/3  4pm ET  → 7/4  04:00台 ✓  (Yahoo: 4pm ET)
-    M88 澳洲vs埃及     7/3  2pm ET  → 7/4  02:00台 ✓
+  時間來源：FIFA官方ET時間(32強) + GMT+2換算(16強後) → 台灣UTC+8
+  32強: FIFA ET + 12h = 台灣
+  16強~決賽: GMT+2 + 6h = 台灣
 
-  16強 (NBC Sports 核對):
-    M89 W74vsW77 (德/法系) 7/4  10pm ET → 7/5 10:00台
-    M90 W73vsW75 (加/荷系) 7/5   6pm ET → 7/6 06:00台
-    M91 W76vsW78 (巴西系)  7/5   9pm ET → 7/6 09:00台
-    M92 W79vsW80 (墨/英系) 7/5   8pm ET → 7/6 08:00台  ← Mexico City 8pm CDT=9pm ET→台7/6 09:00? 
-         注意: Mexico City用CDT(UTC-5夏令), 8pm CDT = 9pm ET = 台灣7/6 09:00
-         但NBC寫 8pm ET for this slot → 台灣7/6 08:00 (依NBC)
-    M93 W83vsW84 (葡/西系) 7/6   3pm ET → 7/7 03:00台
-    M94 W81vsW82 (美/比系) 7/6   8pm ET → 7/7 08:00台
-    M95 W86vsW88 (阿根/澳) 7/7  12pm ET → 7/8 00:00台
-    M96 W85vsW87 (瑞士系)  7/7   4pm ET → 7/8 04:00台
+  32強完整台灣時間:
+  L3 加拿大vs南非    6/29 03:00  (M73 3pm ET)
+  L1 德國vs巴拉圭   6/30 04:30  (M74 4:30pm ET)
+  L4 荷蘭vs摩洛哥   6/30 09:00  (M75 9pm ET)
+  R1 巴西vs日本     6/30 01:00  (M76 1pm ET)
+  R2 象牙海岸vs挪威  7/1  01:00  (M78 1pm ET)
+  L2 法國vs瑞典     7/1  05:00  (M77 5pm ET)
+  R3 厄瓜多vs墨西哥  7/1  09:00  (M79 9pm ET)
+  R4 英格蘭vs剛果   7/2  00:00  (M80 12pm ET)
+  L8 比利時vs塞內加爾 7/2 04:00  (M82 4pm ET)
+  L7 美國vs波士尼亞  7/2  08:00  (M81 8pm ET)
+  L5 葡萄牙vs克羅埃西亞 7/3 07:00 (M83 7pm ET)
+  L6 西班牙vs奧地利  7/3  03:00  (M84 3pm ET)
+  R7 瑞士vs阿爾及利亞 7/3 11:00  (M85 11pm ET)
+  R6 阿根廷vs維德角  7/4  06:00  (M86 6pm ET)
+  R5 澳洲vs埃及     7/4  02:00  (M88 2pm ET)
+  R8 哥倫比亞vs迦納  7/4  09:30  (M87 9:30pm ET)
 
-  八強 (NBC Sports 核對):
-    M97 W89vsW90  7/9  4pm ET → 7/10 04:00台  波士頓
-    M98 W93vsW94  7/10 3pm ET → 7/11 03:00台  洛杉磯
-    M99 W91vsW92  7/11 5pm ET → 7/12 05:00台  邁阿密
-    M100 W95vsW96 7/11 9pm ET → 7/12 09:00台  堪薩斯城
+  16強台灣時間 (GMT+2+6h):
+  LA M89 德/法  7/5  05:00
+  LB M90 加/荷  7/5  01:00
+  LC M93 葡/西  7/7  03:00
+  LD M94 美/比  7/7  08:00
+  RA M91 巴西   7/6  04:00
+  RB M92 墨/英  7/6  10:00  ← 墨西哥城場次，當地深夜
+  RC M95 阿根   7/8  00:00
+  RD M96 瑞士   7/8  04:00
 
-  四強:
-    M101 W97vsW98  7/14 3pm ET → 7/15 03:00台  達拉斯
-    M102 W99vsW100 7/15 3pm ET → 7/16 03:00台  亞特蘭大
+  八強:
+  LQ1 M97  7/10 04:00
+  LQ2 M98  7/11 03:00
+  RQ1 M99  7/12 05:00
+  RQ2 M100 7/12 09:00
 
-  季軍賽:
-    M103             7/18 5pm ET → 7/19 05:00台  邁阿密
-
-  決賽:
-    M104             7/19 3pm ET → 7/20 03:00台  紐澤西
+  四強: LSF 7/15 03:00, RSF 7/16 03:00
+  季軍: 7/19 05:00, 決賽: 7/20 03:00
 */
 
-const S=JSON.parse(localStorage.getItem('wc26sc2')||'{}');
-function save(){localStorage.setItem('wc26sc2',JSON.stringify(S));}
+const S=JSON.parse(localStorage.getItem('wc26v9')||'{}');
+function save(){localStorage.setItem('wc26v9',JSON.stringify(S));}
 
 const MATCHES=[
-  // 32強 左側
-  {id:'L1',t1:'德國',    t2:'巴拉圭',     d:'6/30',tm:'04:30',br:'bL1',  nx:'LA', ns:1},
-  {id:'L2',t1:'法國',    t2:'瑞典',       d:'7/1', tm:'05:00',br:'bL2',  nx:'LA', ns:2},
-  {id:'L3',t1:'加拿大',  t2:'南非',       d:'6/29',tm:'03:00',br:'bL2',  nx:'LB', ns:1},
-  {id:'L4',t1:'荷蘭',    t2:'摩洛哥',    d:'6/30',tm:'09:00',br:'bL1',  nx:'LB', ns:2},
-  {id:'L5',t1:'葡萄牙',  t2:'克羅埃西亞',d:'7/3', tm:'07:00',br:'bL3',  nx:'LC', ns:1},
-  {id:'L6',t1:'西班牙',  t2:'奧地利',    d:'7/3', tm:'03:00',br:'bL4',  nx:'LC', ns:2},
-  {id:'L7',t1:'美國',    t2:'波士尼亞',  d:'7/2', tm:'08:00',br:'bL4',  nx:'LD', ns:1},
-  {id:'L8',t1:'比利時',  t2:'塞內加爾',  d:'7/2', tm:'04:00',br:'bL3',  nx:'LD', ns:2},
-  // 32強 右側
-  {id:'R1',t1:'巴西',    t2:'日本',       d:'6/30',tm:'01:00',br:'bR1',  nx:'RA', ns:1},
-  {id:'R2',t1:'象牙海岸',t2:'挪威',       d:'7/1', tm:'01:00',br:'bR2',  nx:'RA', ns:2},
-  {id:'R3',t1:'厄瓜多',  t2:'墨西哥',    d:'7/1', tm:'09:00',br:'bR2',  nx:'RB', ns:1},
-  {id:'R4',t1:'英格蘭',  t2:'剛果民主',  d:'7/2', tm:'00:00',br:'bR1',  nx:'RB', ns:2},
-  {id:'R5',t1:'澳洲',    t2:'埃及',       d:'7/4', tm:'02:00',br:'bR3',  nx:'RC', ns:2},
-  {id:'R6',t1:'阿根廷',  t2:'維德角',    d:'7/4', tm:'06:00',br:'bR4',  nx:'RC', ns:1},
-  {id:'R7',t1:'瑞士',    t2:'阿爾及利亞',d:'7/3', tm:'11:00',br:'bR4',  nx:'RD', ns:1},
-  {id:'R8',t1:'哥倫比亞',t2:'迦納',       d:'7/4', tm:'04:00',br:'bR3',  nx:'RD', ns:2},
-  // 16強 左側
-  // M89: W74(德/巴) vs W77(法/瑞)  7/4 10pm ET → 7/5 10:00台  費城
-  // M90: W73(加/南) vs W75(荷/摩)  7/5  6pm ET → 7/6 06:00台  休士頓
-  // M93: W83(葡/克) vs W84(西/奧)  7/6  3pm ET → 7/7 03:00台  達拉斯
-  // M94: W81(美/波) vs W82(比/塞)  7/6  8pm ET → 7/7 08:00台  西雅圖
-  {id:'LA',t1:'',t2:'',d:'7/5', tm:'10:00',br:'bL16a',nx:'LQ1',ns:1},
-  {id:'LB',t1:'',t2:'',d:'7/6', tm:'06:00',br:'bL16b',nx:'LQ1',ns:2},
+  {id:'L1',t1:'德國',    t2:'巴拉圭',     d:'6/30',tm:'04:30',br:'bL1',  nx:'LA',ns:1},
+  {id:'L2',t1:'法國',    t2:'瑞典',       d:'7/1', tm:'05:00',br:'bL2',  nx:'LA',ns:2},
+  {id:'L3',t1:'加拿大',  t2:'南非',       d:'6/29',tm:'03:00',br:'bL2',  nx:'LB',ns:1},
+  {id:'L4',t1:'荷蘭',    t2:'摩洛哥',    d:'6/30',tm:'09:00',br:'bL1',  nx:'LB',ns:2},
+  {id:'L5',t1:'葡萄牙',  t2:'克羅埃西亞',d:'7/3', tm:'07:00',br:'bL3',  nx:'LC',ns:1},
+  {id:'L6',t1:'西班牙',  t2:'奧地利',    d:'7/3', tm:'03:00',br:'bL4',  nx:'LC',ns:2},
+  {id:'L7',t1:'美國',    t2:'波士尼亞',  d:'7/2', tm:'08:00',br:'bL4',  nx:'LD',ns:1},
+  {id:'L8',t1:'比利時',  t2:'塞內加爾',  d:'7/2', tm:'04:00',br:'bL3',  nx:'LD',ns:2},
+  {id:'R1',t1:'巴西',    t2:'日本',       d:'6/30',tm:'01:00',br:'bR1',  nx:'RA',ns:1},
+  {id:'R2',t1:'象牙海岸',t2:'挪威',       d:'7/1', tm:'01:00',br:'bR2',  nx:'RA',ns:2},
+  {id:'R3',t1:'厄瓜多',  t2:'墨西哥',    d:'7/1', tm:'09:00',br:'bR2',  nx:'RB',ns:1},
+  {id:'R4',t1:'英格蘭',  t2:'剛果民主',  d:'7/2', tm:'00:00',br:'bR1',  nx:'RB',ns:2},
+  {id:'R5',t1:'澳洲',    t2:'埃及',       d:'7/4', tm:'02:00',br:'bR3',  nx:'RC',ns:2},
+  {id:'R6',t1:'阿根廷',  t2:'維德角',    d:'7/4', tm:'06:00',br:'bR4',  nx:'RC',ns:1},
+  {id:'R7',t1:'瑞士',    t2:'阿爾及利亞',d:'7/3', tm:'11:00',br:'bR4',  nx:'RD',ns:1},
+  {id:'R8',t1:'哥倫比亞',t2:'迦納',       d:'7/4', tm:'09:30',br:'bR3',  nx:'RD',ns:2},
+  {id:'LA',t1:'',t2:'',d:'7/5', tm:'05:00',br:'bL16a',nx:'LQ1',ns:1},
+  {id:'LB',t1:'',t2:'',d:'7/5', tm:'01:00',br:'bL16b',nx:'LQ1',ns:2},
   {id:'LC',t1:'',t2:'',d:'7/7', tm:'03:00',br:'bL16c',nx:'LQ2',ns:1},
   {id:'LD',t1:'',t2:'',d:'7/7', tm:'08:00',br:'bL16d',nx:'LQ2',ns:2},
-  // 16強 右側
-  // M91: W76(巴/日) vs W78(象/挪)  7/5  9pm ET → 7/6 09:00台  紐澤西
-  // M92: W79(厄/墨) vs W80(英/剛)  7/5  8pm ET → 7/6 08:00台  墨西哥城
-  // M95: W86(阿根/維) vs W88(澳/埃) 7/7 12pm ET → 7/8 00:00台  亞特蘭大
-  // M96: W85(瑞/阿爾) vs W87(哥/迦) 7/7 4pm ET → 7/8 04:00台  溫哥華
-  {id:'RA',t1:'',t2:'',d:'7/6', tm:'09:00',br:'bR16a',nx:'RQ1',ns:1},
-  {id:'RB',t1:'',t2:'',d:'7/6', tm:'08:00',br:'bR16b',nx:'RQ1',ns:2},
+  {id:'RA',t1:'',t2:'',d:'7/6', tm:'04:00',br:'bR16a',nx:'RQ1',ns:1},
+  {id:'RB',t1:'',t2:'',d:'7/6', tm:'10:00',br:'bR16b',nx:'RQ1',ns:2},
   {id:'RC',t1:'',t2:'',d:'7/8', tm:'00:00',br:'bR16c',nx:'RQ2',ns:1},
   {id:'RD',t1:'',t2:'',d:'7/8', tm:'04:00',br:'bR16d',nx:'RQ2',ns:2},
-  // 八強
-  // M97: W89vsW90  7/9  4pm ET → 7/10 04:00台  波士頓
-  // M98: W93vsW94  7/10 3pm ET → 7/11 03:00台  洛杉磯
-  // M99: W91vsW92  7/11 5pm ET → 7/12 05:00台  邁阿密
-  // M100: W95vsW96 7/11 9pm ET → 7/12 09:00台  堪薩斯城
   {id:'LQ1',t1:'',t2:'',d:'7/10',tm:'04:00',br:'bLQF1',nx:'LSF',ns:1},
   {id:'LQ2',t1:'',t2:'',d:'7/11',tm:'03:00',br:'bLQF2',nx:'LSF',ns:2},
   {id:'RQ1',t1:'',t2:'',d:'7/12',tm:'05:00',br:'bRQF1',nx:'RSF',ns:1},
   {id:'RQ2',t1:'',t2:'',d:'7/12',tm:'09:00',br:'bRQF2',nx:'RSF',ns:2},
-  // 四強
-  // M101: 7/14 3pm ET → 7/15 03:00台  達拉斯
-  // M102: 7/15 3pm ET → 7/16 03:00台  亞特蘭大
   {id:'LSF',t1:'',t2:'',d:'7/15',tm:'03:00',br:'bLSF',nx:'FINAL',ns:1},
   {id:'RSF',t1:'',t2:'',d:'7/16',tm:'03:00',br:'bRSF',nx:'FINAL',ns:2},
 ];
@@ -212,7 +185,6 @@ function getTeam(mid,slot){
 }
 function getReg(mid,slot){return S[mid+'_r'+slot]??'';}
 function getPK(mid,slot){return S[mid+'_p'+slot]??'';}
-
 function isDraw(mid){
   const r1=getReg(mid,1),r2=getReg(mid,2);
   if(r1===''||r2==='')return false;
@@ -243,25 +215,23 @@ function propagate(mid){
   const m=MM[mid];if(!m||!m.nx)return;
   const winner=getWinner(mid);
   if(m.nx==='FINAL'){renderFinal();return;}
-  const nxKey=m.nx+'_t'+m.ns;
-  S[nxKey]=winner;save();
+  S[m.nx+'_t'+m.ns]=winner;save();
   const el=document.getElementById('tn_'+m.nx+'_'+m.ns);
   if(el)el.value=winner;
-  updateStyle(m.nx);
-  propagate(m.nx);
+  updateStyle(m.nx);propagate(m.nx);
 }
 function updateStyle(mid){
   const draw=isDraw(mid);
   const winner=getWinner(mid);
   const t1=getTeam(mid,1);
-  const row1=document.getElementById('row_'+mid+'_1');
-  const row2=document.getElementById('row_'+mid+'_2');
-  const pk1=document.getElementById('pkw_'+mid+'_1');
-  const pk2=document.getElementById('pkw_'+mid+'_2');
-  if(pk1)pk1.classList.toggle('show',draw);
-  if(pk2)pk2.classList.toggle('show',draw);
-  if(row1)row1.classList.toggle('winner',!!winner&&winner===t1);
-  if(row2)row2.classList.toggle('winner',!!winner&&winner!==t1&&winner!=='');
+  const r1=document.getElementById('row_'+mid+'_1');
+  const r2=document.getElementById('row_'+mid+'_2');
+  const p1=document.getElementById('pkw_'+mid+'_1');
+  const p2=document.getElementById('pkw_'+mid+'_2');
+  if(p1)p1.classList.toggle('show',draw);
+  if(p2)p2.classList.toggle('show',draw);
+  if(r1)r1.classList.toggle('winner',!!winner&&winner===t1);
+  if(r2)r2.classList.toggle('winner',!!winner&&winner!==t1&&winner!=='');
 }
 function renderFinal(){
   const w1=getWinner('LSF'),w2=getWinner('RSF');
@@ -333,16 +303,14 @@ document.getElementById('bk').innerHTML=
 
 document.querySelectorAll('.score-in').forEach(inp=>{
   inp.addEventListener('input',()=>{
-    const mid=inp.dataset.mid,slot=inp.dataset.slot;
-    S[mid+'_r'+slot]=inp.value;save();
-    updateStyle(mid);propagate(mid);
+    S[inp.dataset.mid+'_r'+inp.dataset.slot]=inp.value;save();
+    updateStyle(inp.dataset.mid);propagate(inp.dataset.mid);
   });
 });
 document.querySelectorAll('.pk-in').forEach(inp=>{
   inp.addEventListener('input',()=>{
-    const mid=inp.dataset.mid,slot=inp.dataset.slot;
-    S[mid+'_p'+slot]=inp.value;save();
-    updateStyle(mid);propagate(mid);
+    S[inp.dataset.mid+'_p'+inp.dataset.slot]=inp.value;save();
+    updateStyle(inp.dataset.mid);propagate(inp.dataset.mid);
   });
 });
 document.querySelectorAll('.team-name').forEach(inp=>{
